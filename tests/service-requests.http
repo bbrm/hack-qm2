@@ -1,0 +1,25 @@
+# In the following requests the variable baseUrl is used.
+# Its value is set here.
+@baseUrl = http://localhost:34557
+
+### ------------------------------------------------------------------------
+# Get Service Metadata Document
+GET {{baseUrl}}/service/QmService/$metadata
+
+### ------------------------------------------------------------------------
+# Retrieve the ID of the book with the title 'Faust'
+# Use this ID to call the submitOrder action
+# @name getBookID
+GET {{baseUrl}}/cat/Books?$filter=title eq 'Faust'
+
+###
+
+@bookID = {{getBookID.response.body.$.value[0].ID}}
+
+POST {{baseUrl}}/cat/submitOrder
+Content-Type: application/json
+
+{
+  "book": "{{bookID}}",
+  "quantity": 2
+}
