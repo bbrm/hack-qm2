@@ -30,9 +30,11 @@ entity Team
 
 entity Workplace_Booking
 {
-    key ID : UUID;
+    key workplace_ID : UUID;
     start : Timestamp;
     end : Timestamp;
     workplace : Association to one Workplace;
     employee : Association to one Employee;
+    key employee_ID : UUID;
+    key date : Integer;
 }
