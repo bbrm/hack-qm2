@@ -7,6 +7,7 @@ entity Workplace
     floor : String(2);
     area : String(2);
     workplace_bookings : Association to many Workplace_Booking on workplace_bookings.workplace = $self;
+    status : String(100);
 }
 
 entity Employee
