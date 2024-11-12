@@ -1,25 +1,42 @@
 # In the following requests the variable baseUrl is used.
 # Its value is set here.
-@baseUrl = http://localhost:34557
+@baseUrl = http://localhost:43265
 
 ### ------------------------------------------------------------------------
 # Get Service Metadata Document
 GET {{baseUrl}}/service/QmService/$metadata
 
 ### ------------------------------------------------------------------------
-# Retrieve the ID of the book with the title 'Faust'
+# Get Employee-Service
+GET {{baseUrl}}/service/QmService/Employee
+
+### ------------------------------------------------------------------------
+# Retrieve the ID of the employee with the name 'Quin'
 # Use this ID to call the submitOrder action
-# @name getBookID
-GET {{baseUrl}}/cat/Books?$filter=title eq 'Faust'
+# @name getEmployeeID
+GET {{baseUrl}}/service/QmService/Employee?$filter=firstname eq 'Quin'
 
 ###
 
-@bookID = {{getBookID.response.body.$.value[0].ID}}
+@employeeID = {{getEmployeeID.response.body.$.value[0].employee_ID}}
 
-POST {{baseUrl}}/cat/submitOrder
+### ------------------------------------------------------------------------
+# Retrieve the ID of first Workplace 
+# Use this ID to call the submitOrder action
+# @name getWorkplace
+GET {{baseUrl}}/service/QmService/Workplace?$filter=status eq 'OK'&$top=1
+
+###
+
+
+
+@workplaceID = {{getWorkplace.response.body.$.value[0].worplace_ID}}
+
+POST {{baseUrl}}/service/QmService/createBooking
 Content-Type: application/json
 
 {
-  "book": "{{bookID}}",
-  "quantity": 2
+  "employee_ID": "{{employeeID}}",
+  "workplace_ID": "{{workplaceID}}",
+  "date": 2
 }
