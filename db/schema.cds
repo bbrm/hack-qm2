@@ -2,7 +2,7 @@ namespace quartiermeister2;
 
 entity Workplace
 {
-    key ID : UUID;
+    key worplace_ID : UUID;
     building : String(2);
     floor : String(2);
     area : String(2);
@@ -11,7 +11,7 @@ entity Workplace
 
 entity Employee
 {
-    key ID : UUID;
+    key employee_ID : UUID;
     key User : String(7);
     firstname : String(100);
     lastname : String(100);
@@ -21,7 +21,7 @@ entity Employee
 
 entity Team
 {
-    key ID : UUID;
+    key team_ID : UUID;
     key name : String(100);
     team_day : String(2);
     employees : Association to many Employee on employees.team = $self;
