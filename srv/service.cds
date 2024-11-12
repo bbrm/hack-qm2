@@ -16,6 +16,12 @@ service QmService
     @odata.draft.enabled
     entity Workplace_Booking as
         projection on my.Workplace_Booking;
+
+    action createBooking
+    (
+        booking : Workplace_Booking
+    )
+    returns String;
 }
 
 annotate QmService with @requires :

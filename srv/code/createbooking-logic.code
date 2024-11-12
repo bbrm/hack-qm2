@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "hash": "276e924d7d320aefa1905b6c8bf3d614dae6b1e7cb7cabdd467c70eb5f3e6cc3341ac0e40b8c18bbdafa618a69459a5146a54fb6cf4b4ad982e33a106f7f83d7",
+  "configuration": {
+    "phase": "on",
+    "events": [
+      "createBooking"
+    ],
+    "entity": "QmService.undefined"
+  },
+  "codes": [
+    {
+      "type": "CustomCode",
+      "syntax": ""
+    },
+    {
+      "type": "Assignment",
+      "result": "",
+      "expression": {
+        "syntax": "{}",
+        "dependencies": [
+          "Object"
+        ]
+      }
+    },
+    {
+      "type": "FunctionCall",
+      "syntax": ""
+    }
+  ]
+}
