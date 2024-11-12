@@ -1,0 +1,1 @@
+using QmService as service from '../../srv/service';
