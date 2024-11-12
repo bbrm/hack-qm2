@@ -28,4 +28,5 @@ Learn more at https://cap.cloud.sap/docs/get-started/.
 # Seffel
 
 lsof -i :4004
+
 kill -9 {PID}
