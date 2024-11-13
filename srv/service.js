@@ -4,37 +4,21 @@
  */
 const LCAPApplicationService = require('@sap/low-code-event-handler');
 const createbooking_Logic = require('./code/createbooking-logic');
+const deletebooking_Logic = require('./code/deletebooking-logic');
 
 class QmService extends LCAPApplicationService {
     async init() {
-
-        // const { Employees } = this.entities;
-
-        const { Workplace_Booking } = this.entities;
 
         this.on('createBooking', async (request, next) => {
             return createbooking_Logic(this.entities, request);
         });
 
+        this.on('deleteBooking', async (request, next) => {
+            return deletebooking_Logic(this.entities, request);
+        });
+
         return super.init();
     }
-
-    /*async createBooking(request) {
-
-        console.log("hello createBooking - in new function");
-        console.log(request);
-
-        let employee_ID = request.data.employee_ID;
-        let workplace_ID = request.data.workplace_ID;
-        let date = request.data.date;
-
-        //await UPDATE(Workplace_Booking).where({ ID: book }).with({ stock: { '-=': quantity } });
-
-        console.log(Workplace_Booking);
-        //await CREATE(Workplace_Booking).
-
-        //const b = await SELECT.one.from(this.entities.Employee).where({ employee_ID: employee_ID }).columns(b => { b });
-    }*/
 }
 
 

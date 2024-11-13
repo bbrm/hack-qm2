@@ -4,30 +4,32 @@ using { quartiermeister2 as my } from '../db/schema.cds';
 service QmService
 {
     @cds.redirection.target : false
-    @odata.draft.enabled
     @odata.draft.bypass
+    @odata.draft.enabled
     entity Workplace as
         projection on my.Workplace;
 
-    @odata.draft.enabled
     @odata.draft.bypass
+    @odata.draft.enabled
     entity Employee as
         projection on my.Employee;
 
-    @odata.draft.enabled
     @odata.draft.bypass
+    @odata.draft.enabled
     entity Team as
         projection on my.Team;
 
-    @odata.draft.enabled
     @odata.draft.bypass
+    @odata.draft.enabled
     entity Workplace_Booking as
         projection on my.Workplace_Booking;
 
-    entity Bookings as projection on my.Bookings {
-        ID,
-        name
-    }
+    entity Bookings as
+        projection on my.Bookings
+        {
+            ID,
+            name
+        };
 
     action createBooking
     (
@@ -36,6 +38,12 @@ service QmService
         date : Integer
     )
     returns Workplace_Booking;
+
+    action deleteBooking
+    (
+        workplace_ID : UUID,
+        date : Integer
+    );
 }
 
 annotate QmService with @requires :

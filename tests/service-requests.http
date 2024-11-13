@@ -1,6 +1,6 @@
 # In the following requests the variable baseUrl is used.
 # Its value is set here.
-@baseUrl = http://localhost:4004
+@baseUrl = http://localhost:45485
 
 ### ------------------------------------------------------------------------
 # Get Service Metadata Document
@@ -43,8 +43,28 @@ Content-Type: application/json
 
 ###
 
+POST {{baseUrl}}/service/QmService/createBooking
+Content-Type: application/json
+
+{
+  "employee_ID": "{{employeeID}}",
+  "workplace_ID": "{{workplaceID}}",
+  "date": 4
+}
+
+###
+
 GET {{baseUrl}}/service/QmService/Workplace_Booking
 
+###
+
+POST {{baseUrl}}/service/QmService/deleteBooking
+Content-Type: application/json
+
+{
+  "workplace_ID": "{{workplaceID}}",
+  "date": 3
+}
 ###
 
 POST {{baseUrl}}/service/QmService/Bookings
