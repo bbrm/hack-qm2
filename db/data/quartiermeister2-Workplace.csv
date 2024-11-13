@@ -1,7 +1,7 @@
-worplace_ID;building;floor;area;status
-32006912-3a40-4c23-8a39-e9c947dffbd2;SB;3;A;OK
-547b3510-2d4f-431a-a92d-fa9fe93cc783;SB;3;A;OK
-efddb028-65f7-4e51-ad52-9fdd28f69e3a;SB;3;A;OK
-984343af-ea71-45bf-ac19-29d37841e2a2;SB;3;A;OK
-010b3835-f112-4105-bf42-9ea650e49eff;SB;3;A;OK
-4bb3c631-e333-4c44-b638-7b0577af5bff;SB;3;A;NOK
+worplace_ID;building;floor;area;status;name
+32006912-3a40-4c23-8a39-e9c947dffbd2;SB;3;A;OK;Arbeitsplatz 1
+547b3510-2d4f-431a-a92d-fa9fe93cc783;SB;3;A;OK;Arbeitsplatz 2
+efddb028-65f7-4e51-ad52-9fdd28f69e3a;SB;3;A;OK;Arbeitsplatz 3
+984343af-ea71-45bf-ac19-29d37841e2a2;SB;3;A;OK;Arbeitsplatz 4
+010b3835-f112-4105-bf42-9ea650e49eff;SB;3;A;OK;Arbeitsplatz 5
+4bb3c631-e333-4c44-b638-7b0577af5bff;SB;3;A;NOK;Arbeitsplatz 6
