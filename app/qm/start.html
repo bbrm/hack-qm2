@@ -42,11 +42,13 @@
                                 <th>Id</th>
                                 <th>Name</th>
                                 <th>Vorname</th>
+                                <th></th>
                             </tr>
                             <tr v-for="row in employees">
-                                <td>{{ row.employee_ID}}</td>
+                                <td>{{ row.User}}</td>
                                 <td>{{ row.firstname }}</td>
                                 <td>{{ row.lastname }}</td>
+                                <td><a v-bind:href="'bernhard.html#'+row.employee_ID">Auswahl</a></td>
                             </tr>
                         </table>
                         <br />
