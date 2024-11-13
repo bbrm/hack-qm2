@@ -1,5 +1,8 @@
 employee_ID;User;firstname;lastname;team_team_ID;team_name
-2e1fd728-64bb-415d-8745-edbf965ac245;C123456;Hans;Muster;995e70d2-3088-4b80-89e2-1143677319c6;A-Team
-f3237330-1747-4848-9175-6bd727a25230;C654321;Quin;Beispiel;995e70d2-3088-4b80-89e2-1143677319c6;A-Team
-a8c168c7-970d-4c3e-9fd2-9b46492046cd;C111111;Peter;Müller;50e84768-9784-4706-889c-12516885a759;B-Team
-025e4c86-42d5-4aa8-9e02-e49f9c6fb5b1;C121121;Claudia;Fleischer;50e84768-9784-4706-889c-12516885a759;B-Team
+2e1fd728-64bb-415d-8745-edbf965ac245;C123456;Bernhard;Breitenmoser;995e70d2-3088-4b80-89e2-1143677319c6;Integration Services
+f3237330-1747-4848-9175-6bd727a25230;C654321;Stefan;Bosshard;995e70d2-3088-4b80-89e2-1143677319c6;Integration Services
+a8c168c7-970d-4c3e-9fd2-9b46492046cd;C111111;Florian;Moosmann;50e84768-9784-4706-889c-12516885a759;SAP Strategy and Architecture
+025e4c86-42d5-4aa8-9e02-e49f9c6fb5b1;C121121;Heiko;Küste;50e84768-9784-4706-889c-12516885a759;SAP Strategy and Architecture
+f02374d5-ba97-4376-9015-d4dfccd6f22c;C937053;Florian;Lüscher;50e84768-9784-4706-889c-12516885a759;SAP Strategy and Architecture
+c3692e79-68e0-456c-9ff2-db3bed64b97a;C200000;Adnan;Yahya;3ea73722-5803-45a9-8e49-17067fce6ccd;Finex
+e56fd008-1ab3-4634-851f-26aa94b636bd;C300000;Arthur;Fejklowicz;4edcd7f1-87a8-4f23-ae74-cca56e08e561;myAnalytics
