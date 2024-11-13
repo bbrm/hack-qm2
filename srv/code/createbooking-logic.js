@@ -1,22 +1,54 @@
+const { UUID } = require("@sap/cds/lib/core/classes");
+
 /**
  * 
  * @On(event = { "createBooking" })
  * @param {Object} request - User information, tenant-specific CDS model, headers and query parameters
 */
-module.exports = async function(request) {
-	console.log("lflo");
+module.exports = async function(entities, request) {
+	console.log("lflo entities:");
+	console.log(entities);
+	console.log("lflo data:");
 	console.log(request.data);
-	
-	
+
+	const { Employee } = entities;
+
+	const { Workplace_Booking } = entities;
+
+	const { Bookings } = entities;
+
+	console.log("booking");
+	console.log(Bookings);
+
 	let booking = {
 		employee_ID: request.data.employee_ID,
 		workplace_ID: request.data.workplace_ID,
 		date: request.data.date
 	};
 
+	//await CREATE(entities.Workplace_Booking, booking);
+
+	console.log(Employee);
+	console.log(entities.Employee);
+
+	//const b = await SELECT.one.from(Bookings).where({ ID: "b5c751af-0e44-45ae-9b99-cd805a82da81" });
+
+	//await UPDATE(Bookings).where({ ID: "b5c751af-0e44-45ae-9b99-cd805a82da81" }).with({ name: "flo's test" });
+
+	console.log("FLO 1");
+
+	/*await INSERT ({
+		ID: "b5c751af-0e44-45ae-9b99-cd805a82da82",
+		name: "flo test"
+	}).into (Bookings);
+	*/
+
+	console.log("FLO 2")
+	//console.log(b);
+
 	// TODO Save Booking
 	
-	console.log(booking);
+	await INSERT (booking).into(Workplace_Booking);
 
 	return booking;
 }

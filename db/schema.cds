@@ -1,5 +1,13 @@
 namespace quartiermeister2;
 
+using {
+    cuid,
+    managed,
+    Currency,
+    Country,
+    sap.common.CodeList
+} from '@sap/cds/common';
+
 entity Workplace
 {
     key worplace_ID : UUID;
@@ -37,4 +45,9 @@ entity Workplace_Booking
     employee : Association to one Employee;
     key employee_ID : UUID;
     key date : Integer;
+}
+
+entity Bookings {
+    key ID: UUID;
+    name : localized String(255) @mandatory; 
 }
