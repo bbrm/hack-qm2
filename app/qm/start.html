@@ -23,7 +23,7 @@
 <body>
 
 
-    <h1>Sefel BOSS QM-X /service/QmService/Team</h1>
+    <h1>Quartiermeister - Mitarbeiterauswahl</h1>
 
 
     <div id="app">
@@ -36,24 +36,21 @@
                         <img src="res/qm.jpg" />
                     </td>
                     <td valign="top">
-                        <h2>Teams</h2>
+                        <h2>Mitarbeiterauswahl</h2>
                         <table class="table">
                             <tr>
                                 <th>Id</th>
                                 <th>Name</th>
-                                <th>Day</th>
+                                <th>Vorname</th>
                             </tr>
-                            <tr v-for="row in team">
-                                <td>{{ row.team_ID}}</td>
-                                <td>{{ row.name }}</td>
-                                <td>{{ row.team_day }}</td>
+                            <tr v-for="row in employees">
+                                <td>{{ row.employee_ID}}</td>
+                                <td>{{ row.firstname }}</td>
+                                <td>{{ row.lastname }}</td>
                             </tr>
                         </table>
                         <br />
-                        <h3>Create</h3>
-                        Name: <input type="text" v-model="create.name" /><br />
-                        Day: <input type="text" v-model="create.day" /><br />
-                        <input type="button" v-on:click="onCreate" value="Create" />
+                        
                     </td>
                 </tr>
             </table>
@@ -67,20 +64,16 @@
         var app = new Vue({
             el: '#app',
             data: {
-                team: [],
-                create: {
-                    name: 'Seffel',
-                    day: 'Mi'
-                }
+                employees: []
             },
             methods: {
                 getData: function (params) {
-                    var target = '/service/QmService/Team';
+                    var target = '/service/QmService/Employee';
                     //if (params) target+='&'+params;
                     fetch(target).then(function (response) {
                         response.json().then(function (data) {
                             debugger;
-                            app.team = data.value;
+                            app.employees = data.value;
                             //		if (!app.acl.balanced) {
                             //          	 setTimeout( () => { app.getData(); }, 2000);
                             //		}	                
@@ -89,26 +82,7 @@
                         console.log(error.statusText);
                     });
                 },
-                onCreate: function (event) {
-                    const requestOptions = {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ name: app.create.name, team_day: app.create.day, IsActiveEntity: true, HasDraftEntity: false })
-                    };
-                    debugger;
-                    fetch('/service/QmService/Team', requestOptions).then(function (response) {
-                        debugger;
-                        response.json().then(function (data) {
-                            app.getData(adds);
-                        });
-                    }, function (error) {
-                        console.log(error.statusText);
-                    });
-                },
-                onAddUser: function (event) {
-                    var adds = 'add=user&user=' + app.add.user + '&operation=' + app.add.operation;
-                    this.getData(adds);
-                }
+            
             },
             mounted: function () {
                 this.getData();
