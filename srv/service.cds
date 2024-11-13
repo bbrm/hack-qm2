@@ -5,18 +5,22 @@ service QmService
 {
     @cds.redirection.target : false
     @odata.draft.enabled
+    @odata.draft.bypass
     entity Workplace as
         projection on my.Workplace;
 
     @odata.draft.enabled
+    @odata.draft.bypass
     entity Employee as
         projection on my.Employee;
 
     @odata.draft.enabled
+    @odata.draft.bypass
     entity Team as
         projection on my.Team;
 
     @odata.draft.enabled
+    @odata.draft.bypass
     entity Workplace_Booking as
         projection on my.Workplace_Booking;
 

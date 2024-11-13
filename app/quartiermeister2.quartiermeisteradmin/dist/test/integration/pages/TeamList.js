@@ -1,0 +1,2 @@
+sap.ui.define(["sap/fe/test/ListReport"],function(e){"use strict";var t={actions:{},assertions:{}};return new e({appId:"quartiermeister2.quartiermeisteradmin",componentId:"TeamList",contextPath:"/Team"},t)});
+//# sourceMappingURL=TeamList.js.map

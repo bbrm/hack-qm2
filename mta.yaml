@@ -1,0 +1,218 @@
+_schema-version: '3.1'
+ID: quartiermeister2
+version: 1.0.0
+description: A simple CAP project.
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - rm -rf build/dist
+        - mkdir -p build/dist
+        - rm -rf build/ui-deployer
+        - mkdir -p build/ui-deployer
+    - builder: custom
+      commands:
+        - npm install --production
+        - >-
+          bash -c "cds -v | grep 'cds-dk' || npm i --production --no-save
+          @sap/cds-dk @sap/mdk-tools"
+        - bash -c "export PATH=$PATH:$(pwd)/node_modules/.bin"
+        - cds build --production
+  after-all:
+    - builder: custom
+      commands:
+        - npm install
+modules:
+  - name: quartiermeister2-quartiermeister2.quartiermeisteradmin
+    type: html5
+    path: app/quartiermeister2.quartiermeisteradmin
+    build-parameters:
+      builder: custom
+      commands:
+        - rm -rf dist-zip dist
+        - npm install
+        - >-
+          npx -p @ui5/cli@^3.0.0 ui5 build --dest dist
+          --include-task=generateCachebusterInfo
+        - mkdir dist-zip
+        - >-
+          bash -c "cd dist && npx bestzip
+          ../dist-zip/quartiermeister2quartiermeisteradmin.zip *"
+      _artifactName: quartiermeister2quartiermeisteradmin.zip
+      supported-platforms: []
+      build-result: dist-zip
+  - name: quartiermeister2-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+      ignore:
+        - node_modules
+        - package-lock.json
+    requires:
+      - name: quartiermeister2-service-uaa
+      - name: quartiermeister2-service-db
+  - name: quartiermeister2-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      memory: 256MB
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    build-parameters:
+      builder: npm
+      ignore:
+        - node_modules
+        - package-lock.json
+    requires:
+      - name: quartiermeister2-service-uaa
+      - name: quartiermeister2-service-db
+      - name: quartiermeister2-service-destination
+      - name: quartiermeister2-service-metadata
+      - name: quartiermeister2-service-connectivity
+      - name: quartiermeister2-service-logs
+  - name: quartiermeister2-aux-destinations
+    type: com.sap.application.content
+    parameters:
+      content:
+        subaccount:
+          existing_destinations_policy: update
+          destinations:
+            - Authentication: OAuth2UserTokenExchange
+              Name: quartiermeister2-service-uaa
+              ServiceInstanceName: quartiermeister2-uaa
+              ServiceKeyName: quartiermeister2-uaa-key
+              sap.cloud.service: lcap.quartiermeister2
+            - Authentication: OAuth2UserTokenExchange
+              Name: quartiermeister2-app-srv
+              TokenServiceInstanceName: quartiermeister2-uaa
+              TokenServiceKeyName: quartiermeister2-uaa-key
+              URL: ~{srv-api/srv-url}
+              sap.cloud.service: lcap.quartiermeister2
+            - Name: quartiermeister2-service-html5-apps-repo-host
+              ServiceInstanceName: quartiermeister2-html5-apps-repo-host
+              ServiceKeyName: quartiermeister2-html5-apps-repo-host-key
+              sap.cloud.service: lcap.quartiermeister2
+            - Authentication: OAuth2UserTokenExchange
+              Name: quartiermeister2-QmService
+              TokenServiceInstanceName: quartiermeister2-uaa
+              TokenServiceKeyName: quartiermeister2-uaa-key
+              URL: ~{srv-api/srv-url}/service/QmService
+              sap.cloud.service: lcap.quartiermeister2
+              sap.applicationdevelopment.actions.enabled: false
+              sap.build.usage: CAP
+              sap.processautomation.enabled: false
+              HTML5.DynamicDestination: false
+              WebIDEEnabled: false
+              MobileEnabled: false
+              AppgyverEnabled: false
+    build-parameters:
+      no-source: true
+    requires:
+      - name: quartiermeister2-service-uaa
+        parameters:
+          service-key:
+            name: quartiermeister2-uaa-key
+      - name: srv-api
+      - name: quartiermeister2-service-html5-apps-repo-host
+        parameters:
+          service-key:
+            name: quartiermeister2-html5-apps-repo-host-key
+      - name: quartiermeister2-service-destination
+        parameters:
+          content-target: true
+  - name: quartiermeister2-launchpad
+    type: html5
+    path: build/launchpad
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - >-
+          npx -p @ui5/cli@^3.0.0 ui5 build --dest dist
+          --include-task=generateCachebusterInfo
+        - bash -c "cd dist && npx bestzip ../../../build/dist/launchpad.zip *"
+        - rm -rf dist
+      _artifactName: launchpad.zip
+      supported-platforms: []
+      build-result: ../../build/dist
+  - name: quartiermeister2-aux-ui-deployer
+    type: com.sap.application.content
+    path: build/ui-deployer
+    build-parameters:
+      build-result: resources
+      requires:
+        - name: quartiermeister2-quartiermeister2.quartiermeisteradmin
+          artifacts:
+            - quartiermeister2quartiermeisteradmin.zip
+          target-path: resources
+        - name: quartiermeister2-launchpad
+          artifacts:
+            - launchpad.zip
+          target-path: resources
+    requires:
+      - name: quartiermeister2-service-html5-apps-repo-host
+        parameters:
+          content-target: true
+resources:
+  - type: org.cloudfoundry.managed-service
+    name: quartiermeister2-service-uaa
+    parameters:
+      service: xsuaa
+      service-plan: application
+      service-name: quartiermeister2-uaa
+      path: xs-security.json
+      config:
+        oauth2-configuration:
+          redirect-uris:
+            - https://*.${default-domain}/login/*
+        xsappname: quartiermeister2-${space}
+        role-collections: []
+  - type: org.cloudfoundry.managed-service
+    name: quartiermeister2-service-db
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+      service-name: quartiermeister2-db
+  - type: org.cloudfoundry.managed-service
+    name: quartiermeister2-service-destination
+    parameters:
+      service: destination
+      service-plan: lite
+      service-name: quartiermeister2-destination
+      config:
+        HTML5Runtime_enabled: true
+        version: 1.0.0
+  - type: org.cloudfoundry.user-provided-service
+    name: quartiermeister2-service-metadata
+    parameters:
+      service: metadata
+      service-plan: standard
+      service-name: quartiermeister2-metadata
+      config:
+        default-domain: ${default-domain}
+  - type: org.cloudfoundry.managed-service
+    name: quartiermeister2-service-connectivity
+    parameters:
+      service: connectivity
+      service-plan: lite
+      service-name: quartiermeister2-connectivity
+  - type: org.cloudfoundry.managed-service
+    name: quartiermeister2-service-logs
+    parameters:
+      service: application-logs
+      service-plan: lite
+      service-name: quartiermeister2-logs
+  - type: org.cloudfoundry.managed-service
+    name: quartiermeister2-service-html5-apps-repo-host
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+      service-name: quartiermeister2-html5-apps-repo-host

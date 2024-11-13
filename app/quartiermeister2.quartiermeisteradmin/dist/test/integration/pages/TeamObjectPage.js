@@ -1,0 +1,2 @@
+sap.ui.define(["sap/fe/test/ObjectPage"],function(e){"use strict";var t={actions:{},assertions:{}};return new e({appId:"quartiermeister2.quartiermeisteradmin",componentId:"TeamObjectPage",contextPath:"/Team"},t)});
+//# sourceMappingURL=TeamObjectPage.js.map
