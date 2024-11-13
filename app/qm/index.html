@@ -1,0 +1,120 @@
+<html>
+
+<head>
+    <script src="res/vue-2.min.js"></script>
+    <style>
+        * {
+            font-family: Verdana, "Open Sans", Helvetica, Arial, sans-serif;
+        }
+
+        th,
+        td {
+            text-align: left;
+            vertical-align: top;
+            padding-right: 10px;
+        }
+
+        .loading__ {
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <h1>Seffel QM-X /service/QmService/Team</h1>
+
+
+    <div id="app">
+
+        <div>
+
+            <table>
+                <tr>
+                    <td valign="top">
+                        <img src="res/qm.jpg" />
+                    </td>
+                    <td valign="top">
+                        <h2>Teams</h2>
+                        <table class="table">
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Day</th>
+                            </tr>
+                            <tr v-for="row in team">
+                                <td>{{ row.team_ID}}</td>
+                                <td>{{ row.name }}</td>
+                                <td>{{ row.team_day }}</td>
+                            </tr>
+                        </table>
+                        <br />
+                        <h3>Create</h3>
+                        Name: <input type="text" v-model="create.name" /><br />
+                        Day: <input type="text" v-model="create.day" /><br />
+                        <input type="button" v-on:click="onCreate" value="Create" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+
+
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                team: [],
+                create: {
+                    name: 'Seffel',
+                    day: 'Mi'
+                }
+            },
+            methods: {
+                getData: function (params) {
+                    var target = '/service/QmService/Team';
+                    //if (params) target+='&'+params;
+                    fetch(target).then(function (response) {
+                        response.json().then(function (data) {
+                            debugger;
+                            app.team = data.value;
+                            //		if (!app.acl.balanced) {
+                            //          	 setTimeout( () => { app.getData(); }, 2000);
+                            //		}	                
+                        });
+                    }, function (error) {
+                        console.log(error.statusText);
+                    });
+                },
+                onCreate: function (event) {
+                    const requestOptions = {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name: app.create.name, team_day: app.create.day, IsActiveEntity: true, HasDraftEntity: false })
+                    };
+                    debugger;
+                    fetch('/service/QmService/Team', requestOptions).then(function (response) {
+                        debugger;
+                        response.json().then(function (data) {
+                            app.getData(adds);
+                        });
+                    }, function (error) {
+                        console.log(error.statusText);
+                    });
+                },
+                onAddUser: function (event) {
+                    var adds = 'add=user&user=' + app.add.user + '&operation=' + app.add.operation;
+                    this.getData(adds);
+                }
+            },
+            mounted: function () {
+                this.getData();
+            }
+        })
+    </script>
+</body>
+
+</html>
