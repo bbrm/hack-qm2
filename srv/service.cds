@@ -24,6 +24,11 @@ service QmService
     entity Workplace_Booking as
         projection on my.Workplace_Booking;
 
+    entity Bookings as projection on my.Bookings {
+        ID,
+        name
+    }
+
     action createBooking
     (
         employee_ID : UUID,
