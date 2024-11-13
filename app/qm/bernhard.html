@@ -51,7 +51,7 @@
             background-color: green;
         }
 
-        #room div.occupied { 
+        #room div.occupied {
             background-color: red;
         }
 
@@ -106,25 +106,9 @@
 
                         </div>
 
-                        <h2>Teams</h2>
-                        <table class="table">
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Day</th>
-                            </tr>
-                            <tr v-for="row in team">
-                                <td>{{ row.team_ID}}</td>
-                                <td>{{ row.name }}</td>
-                                <td>{{ row.team_day }}</td>
-                            </tr>
-                        </table>
+                       
                         <br />
-                        <h3>Create</h3>
-                        Name: <input type="text" v-model="create.name" /><br />
-                        Day: <input type="text" v-model="create.day" /><br />
-                        <input type="button" v-on:click="onCreate" value="Create" />
-                        <br />
+                        <div>{{ employee}}</div>
 
                     </td>
                 </tr>
@@ -147,14 +131,14 @@
             el: '#app',
             data: {
                 day: 13,
-                team: [],
+                employee: '025e4c86-42d5-4aa8-9e02-e49f9c6fb5b1',
                 tables: [
-                    { id: 12, x: 30, y: 150, d: '90', status: 'free' },
-                    { id: 13, x: 150, y: 150, d: '270', status: 'free' },
-                    { id: 15, x: 30, y: 350, d: '90', status: 'occupied', n1: 'Bernhard', n2: 'Breitenmoser' },
-                    { id: 16, x: 165, y: 345, d: '260', status: 'free' },
-                    { id: 14, x: 400, y: 150, d: '45', status: 'free' },
-                    { id: 17, x: 70, y: 520, d: '0', status: 'occupied', n1: 'Stefan', n2: 'Bosshard' }],
+                    { id: 12, uuid: '010b3835-f112-4105-bf42-9ea650e49eff', x: 30, y: 150, d: '90', status: 'free' },
+                    { id: 13, uuid: '32006912-3a40-4c23-8a39-e9c947dffbd2', x: 150, y: 150, d: '270', status: 'free' },
+                    { id: 15, uuid: '4bb3c631-e333-4c44-b638-7b0577af5bff', x: 30, y: 350, d: '90', status: 'occupied', n1: 'Bernhard', n2: 'Breitenmoser' },
+                    { id: 16, uuid: '547b3510-2d4f-431a-a92d-fa9fe93cc783', x: 165, y: 345, d: '260', status: 'free' },
+                    { id: 14, uuid: '984343af-ea71-45bf-ac19-29d37841e2a2', x: 400, y: 150, d: '45', status: 'free' },
+                    { id: 17, uuid: 'efddb028-65f7-4e51-ad52-9fdd28f69e3a', x: 70, y: 520, d: '0', status: 'occupied', n1: 'Stefan', n2: 'Bosshard' }],
 
                 bookings: [],
                 create: {
@@ -212,17 +196,19 @@
 
 
                     for (table of app.tables) {
-                    table.status='none';
-                    table.n1='';
-                    table.n2='';
-                }
+                        table.status = 'none';
+                        table.n1 = '';
+                        table.n2 = '';
+                    }
 
 
                 }
             },
             mounted: function () {
-
-
+                debugger;
+                if (location.hash) {
+                    app.employee = location.hash;
+                }
             }
         });
 
