@@ -59,7 +59,7 @@
             background-color: #aaa;
         }
 
-        #head {
+        #head, #empl {
             font-size: 20px;
         }
 
@@ -87,6 +87,10 @@
                 <tr>
 
                     <td valign="top">
+                        <div id="empl">
+<span><a href="index.html">home</a></span>
+                            <span>{{name}}</span><br/><br/>
+                        </div>
                         <div id="head">
 
                             <span class="button" v-on:click="onPrev">PREV</span> <span>{{day}}</span>. November <span
@@ -132,15 +136,16 @@
             el: '#app',
             data: {
                 day: 13,
+                name: 'unknown',
                 employee: '025e4c86-42d5-4aa8-9e02-e49f9c6fb5b1',
                 employees: {},
                 tables: [
-                    { id: 12, x: 30, y: 150, d: '90', status: 'none' },
-                    { id: 13, x: 150, y: 150, d: '270', status: 'none' },
-                    { id: 15, x: 30, y: 350, d: '90', status: 'none' },
-                    { id: 16, x: 165, y: 345, d: '260', status: 'none' },
-                    { id: 14, x: 400, y: 150, d: '45', status: 'none' },
-                    { id: 17, x: 70, y: 520, d: '0', status: 'none' }],
+                    { id: 12, x: 30, y: 220, d: '90', status: 'none' },
+                    { id: 13, x: 150, y: 220, d: '270', status: 'none' },
+                    { id: 15, x: 30, y: 420, d: '90', status: 'none' },
+                    { id: 16, x: 165, y: 405, d: '260', status: 'none' },
+                    { id: 14, x: 400, y: 220, d: '45', status: 'none' },
+                    { id: 17, x: 70, y: 590, d: '0', status: 'none' }],
 
                 bookings: [],
                 create: {
@@ -176,6 +181,9 @@
                             app.employees={} ;                      
                             for (employee of data.value) {
                                 app.employees[employee.employee_ID]=employee;
+                                if (employee.employee_ID===app.employee) {
+app.name=employee.firstname+' '+employee.lastname;
+                                }
                             }
                            app.onReload();
                         });
@@ -273,6 +281,7 @@
                                     }
                                 }
                             }
+                            setTimeout(() => { app.onReload(); }, 2000);
                         });
 
                     }, function (error) {
