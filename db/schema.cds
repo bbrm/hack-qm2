@@ -56,3 +56,13 @@ entity Bookings
     name : localized String(255)
         @mandatory;
 }
+
+entity floorplan_coordinates
+{
+    key ID : Integer;
+    confidence : Decimal;
+    xMin_pixel : Integer;
+    yMin_pixel : Integer;
+    xMax_pixel : Integer;
+    yMax_pixel : Integer;
+}
