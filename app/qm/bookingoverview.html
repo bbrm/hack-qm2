@@ -33,22 +33,31 @@
             <table>
                 <tr>
                     <td valign="top">
-                        <img src="res/qm.jpg" />
+                        
+                    </td>
+                    <td valign="top">
+                        <a href="start.html">zurück</a>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td valign="top">
+                        
                     </td>
                     <td valign="top">
                         <h2>Buchungsübersicht für</h2>
                         <table class="table">
                             <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Vorname</th>
+                                <th>Workplace</th>
+                                <th>User ID</th>
+                                <th>Datum</th>
                                 <th></th>
                             </tr>
                             <tr v-for="row in bookings">
                                 <td>{{ row.workplace_ID}}</td>
                                 <td>{{ row.employee_ID }}</td>
                                 <td>{{ row.date }}</td>
-                                <td><a v-bind:href="'booking.html#'+row.employee_ID">neue Reservation</a> &nbsp  &nbsp </td>
+                                <td> </td>
                                 
                             </tr>
                         </table>
