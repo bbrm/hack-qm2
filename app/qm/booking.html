@@ -1,0 +1,298 @@
+<html>
+
+<head>
+    <script src="res/vue-2.min.js"></script>
+    <style>
+        * {
+            font-family: Verdana, "Open Sans", Helvetica, Arial, sans-serif;
+        }
+
+        th,
+        td {
+            text-align: left;
+            vertical-align: top;
+            padding-right: 10px;
+        }
+
+        .loading__ {
+            visibility: hidden;
+        }
+
+        #room {
+            display: block;
+            width: 500;
+            height: 700;
+
+        }
+
+        #room div {
+            position: absolute;
+            border: 2px solid grey;
+            display: block;
+            width: 140;
+            height: 90;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        #room div b {
+            font-size: 20px;
+        }
+
+        #room div:hover {
+            border-color: black;
+        }
+
+        #room div.free {
+            background-color: green;
+        }
+
+        #room div.occupied {
+            background-color: red;
+        }
+
+        #room div.none {
+            background-color: #aaa;
+        }
+
+        #head {
+            font-size: 20px;
+        }
+
+        #head .button {
+            border: 2px solid #999;
+            background-color: #ccc;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <h1>Quartiermeister</h1>
+
+
+    <div id="app">
+
+        <div>
+
+            <table>
+                <tr>
+
+                    <td valign="top">
+                        <div id="head">
+
+                            <span class="button" v-on:click="onPrev">PREV</span> <span>{{day}}</span>. November <span
+                                class="button" v-on:click="onNext">NEXT</span>
+                        </div>
+
+                        <div id="room">
+
+
+
+                            <div v-on:click="onBooking"
+                                v-bind:style="{top: table.y, left:table.x, rotate:table.d+'deg'}"
+                                v-bind:class="table.status" v-bind:title="table.uuid" v-for="table in tables">#<b>{{
+                                    table.id }}</b><br /><br />{{ table.n1 }}<br />{{ table.n2 }}
+                            </div>
+
+
+
+                        </div>
+
+
+                        <br />
+                        <div>{{ employee}}</div>
+
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+    <script>
+
+
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                day: 13,
+                employee: '025e4c86-42d5-4aa8-9e02-e49f9c6fb5b1',
+                employees: {},
+                tables: [
+                    { id: 12, x: 30, y: 150, d: '90', status: 'none' },
+                    { id: 13, x: 150, y: 150, d: '270', status: 'none' },
+                    { id: 15, x: 30, y: 350, d: '90', status: 'none' },
+                    { id: 16, x: 165, y: 345, d: '260', status: 'none' },
+                    { id: 14, x: 400, y: 150, d: '45', status: 'none' },
+                    { id: 17, x: 70, y: 520, d: '0', status: 'none' }],
+
+                bookings: [],
+                create: {
+                    name: 'Seffel',
+                    day: 'Mi'
+                }
+            },
+            methods: {
+
+                getData: function (params) {
+                    var target = '/service/QmService/Workplace';
+                    //if (params) target+='&'+params;
+                    fetch(target).then(function (response) {
+                        response.json().then(function (data) {
+                            app.workplaces = data.value;
+                            var i = 0;
+                            for (table of app.tables) {
+                                if (app.workplaces[i]) {
+                                    table.uuid = app.workplaces[i].worplace_ID;
+                                    i++;
+                                }
+                            }
+                           app.onReload();
+                        });
+                    }, function (error) {
+                        console.log(error.statusText);
+                    });
+
+                     target = '/service/QmService/Employee';
+                    //if (params) target+='&'+params;
+                    fetch(target).then(function (response) {
+                        response.json().then(function (data) {     
+                            app.employees={} ;                      
+                            for (employee of data.value) {
+                                app.employees[employee.employee_ID]=employee;
+                            }
+                           app.onReload();
+                        });
+                    }, function (error) {
+                        console.log(error.statusText);
+                    });
+                },
+                onCreate: function (event) {
+                    const requestOptions = {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name: app.create.name, team_day: app.create.day, IsActiveEntity: true, HasDraftEntity: false })
+                    };
+
+                    fetch('/service/QmService/Team', requestOptions).then(function (response) {
+                        debugger;
+                        response.json().then(function (data) {
+                            app.getData(adds);
+                        });
+                    }, function (error) {
+                        console.log(error.statusText);
+                    });
+                },
+                onAddUser: function (event) {
+                    var adds = 'add=user&user=' + app.add.user + '&operation=' + app.add.operation;
+                    this.getData(adds);
+                },
+                onBooking: function (event) {
+                    var workplace = event.target.title;
+                    if (event.target._prevClass === 'free') {
+                        const requestOptions = {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ employee_ID: app.employee, workplace_ID: workplace, date: app.day })
+                        };
+                        fetch('/service/QmService/createBooking', requestOptions).then(function (response) {
+                           
+                                app.onReload();
+                           
+                        }, function (error) {
+                            console.log(error.statusText);
+                        });
+                    } else {
+                        const requestOptions = {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ workplace_ID: workplace, date: app.day })
+                        };
+                        fetch('/service/QmService/deleteBooking', requestOptions).then(function (response) {
+                          
+                                app.onReload();
+                           
+                        }, function (error) {
+                            console.log(error.statusText);
+                        });
+                    }
+
+
+
+                },
+                onPrev: function (event) {
+                    app.day--;
+                    this.onDay();
+                },
+                onNext: function (event) {
+                    app.day++;
+                    this.onDay();
+                },
+                onDay: function () {
+
+
+                    for (table of app.tables) {
+                        table.status = 'none';
+                        table.n1 = '';
+                        table.n2 = '';
+                    }
+                    this.onReload();   
+                },
+                onReload: function () { 
+
+                    var target = '/service/QmService/Workplace_Booking?$filter=date%20eq%20' + app.day;
+                    //if (params) target+='&'+params;
+                    fetch(target).then(function (response) {
+                        response.json().then(function (data) {
+                            for (table of app.tables) {
+                                table.status = 'free';
+                                table.n1 = '';
+                                table.n2 = '';
+                                for (value of data.value) {
+                                    if (table.uuid === value.workplace_ID) {
+                                        table.status = 'occupied';
+                                        var emp=app.employees[value.employee_ID];
+                                        table.n1 = emp?emp.firstname:'unknown';
+                                        table.n2 = emp?emp.lastname:value.employee_ID;
+                                    }
+                                }
+                            }
+                        });
+
+                    }, function (error) {
+                        console.log(error.statusText);
+                    });
+
+
+
+                }
+            },
+            mounted: function () {
+                this.getData();
+                // this.onDay();
+            }
+        });
+        if (location.hash) {
+            app.employee = location.hash.substr(1);
+        }
+       // setTimeout(() => { app.onDay(); }, 1000);
+    </script>
+</body>
+
+</html>
