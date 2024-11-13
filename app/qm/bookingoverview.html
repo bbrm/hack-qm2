@@ -36,7 +36,7 @@
                         <img src="res/qm.jpg" />
                     </td>
                     <td valign="top">
-                        <h2>Mitarbeiter</h2>
+                        <h2>Buchungsübersicht für</h2>
                         <table class="table">
                             <tr>
                                 <th>Id</th>
@@ -44,12 +44,12 @@
                                 <th>Vorname</th>
                                 <th></th>
                             </tr>
-                            <tr v-for="row in employees">
-                                <td>{{ row.User}}</td>
-                                <td>{{ row.firstname }}</td>
-                                <td>{{ row.lastname }}</td>
+                            <tr v-for="row in bookings">
+                                <td>{{ row.workplace_ID}}</td>
+                                <td>{{ row.employee_ID }}</td>
+                                <td>{{ row.date }}</td>
                                 <td><a v-bind:href="'booking.html#'+row.employee_ID">neue Reservation</a> &nbsp  &nbsp </td>
-                                <td><a v-bind:href="'booking.html#'+row.employee_ID">Reservationen anzeigen</a></td>
+                                
                             </tr>
                         </table>
                         <br />
@@ -67,16 +67,16 @@
         var app = new Vue({
             el: '#app',
             data: {
-                employees: []
+                bookings: []
             },
             methods: {
                 getData: function (params) {
-                    var target = '/service/QmService/Employee';
+                    var target = '/service/QmService/Workplace_Booking';
                     //if (params) target+='&'+params;
                     fetch(target).then(function (response) {
                         response.json().then(function (data) {
                             debugger;
-                            app.employees = data.value;
+                            app.bookings = data.value;
                             //		if (!app.acl.balanced) {
                             //          	 setTimeout( () => { app.getData(); }, 2000);
                             //		}	                
